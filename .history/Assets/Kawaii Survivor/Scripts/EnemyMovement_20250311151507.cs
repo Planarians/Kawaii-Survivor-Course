@@ -22,10 +22,12 @@ public class EnemyMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+
         if (player != null)
         {
             FollowPlayer();
         }
+
     }
 
     public void StorePlayer(Player player)

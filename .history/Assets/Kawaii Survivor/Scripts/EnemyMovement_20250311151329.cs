@@ -10,28 +10,34 @@ public class EnemyMovement : MonoBehaviour
 
     [Header("Settings")]
     [SerializeField] private float moveSpeed = 2f;
+    [SerializeField] private float playerDetectionRadius = 1f;
 
 
 
+    [Header("DEBUG")]
+    [SerializeField] private bool gizmos;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+
+
+
+
     }
 
     // Update is called once per frame
     void Update()
     {
+
         if (player != null)
         {
             FollowPlayer();
         }
+
     }
 
-    public void StorePlayer(Player player)
-    {
-        this.player = player;
-    }
+
 
 
     private void FollowPlayer()
@@ -44,7 +50,14 @@ public class EnemyMovement : MonoBehaviour
         transform.position = targetPosition;
     }
 
-
+    //用于检测Enemy检测范围
+    private void OnDrawGizmos()
+    {
+        if (!gizmos) return;
+        Gizmos.color = Color.red;
+        //绘制Enemy检测范围
+        Gizmos.DrawWireSphere(transform.position, playerDetectionRadius);
+    }
 
 
 }
