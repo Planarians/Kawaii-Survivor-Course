@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 3543218379829163369}
   - component: {fileID: 4014483437635326651}
   - component: {fileID: 7628685730055002223}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Pass Away Particles
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4901,7 +4901,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4283791550477413770}
   - component: {fileID: 8919838512608314104}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Enemy Renderer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4988,7 +4988,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8644497124956006801}
   - component: {fileID: 4573195587898340766}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Spawn Indicator
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5076,7 +5076,8 @@ GameObject:
   - component: {fileID: 3437896263974113575}
   - component: {fileID: 6789620814579734759}
   - component: {fileID: 7910686815913958344}
-  m_Layer: 0
+  - component: {fileID: 3058177449914978937}
+  m_Layer: 6
   m_Name: Enemy
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5133,3 +5134,40 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveSpeed: 1
+--- !u!70 &3058177449914978937
+CapsuleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9010287837946075915}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_CompositeOperation: 0
+  m_CompositeOrder: 0
+  m_Offset: {x: -0.05586958, y: 0.72631013}
+  m_Size: {x: 0.8799162, y: 1.6480916}
+  m_Direction: 0

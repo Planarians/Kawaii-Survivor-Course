@@ -1,0 +1,37 @@
+using System.Security.Cryptography;
+using UnityEngine;
+
+public class PlayerHealth : MonoBehaviour
+{
+    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    [Header("Settings")]
+    [SerializeField] private int health = 10;
+
+    void Start()
+    {
+
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+
+    }
+
+    public void TakeDamage(int damage)
+    {
+        int realDamage = Mathf.Max(damage, health);
+        health -= damage;
+
+        if (health <= 0)
+        {
+            PassAway();
+        }
+    }
+
+    private void PassAway()
+    {
+        Debug.Log("Player is dead");
+        Destroy(gameObject);
+    }
+}
