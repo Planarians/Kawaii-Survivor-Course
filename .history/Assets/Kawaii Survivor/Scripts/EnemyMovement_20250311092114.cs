@@ -66,7 +66,6 @@ public class EnemyMovement : MonoBehaviour
         enemyRenderer.enabled = true;
         spawnIndicator.enabled = false;
         // moveSpeed = 1f;
-        hasSpawned = true;
     }
 
     private void FollowPlayer()

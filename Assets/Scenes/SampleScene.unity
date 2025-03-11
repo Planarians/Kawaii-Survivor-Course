@@ -3704,7 +3704,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemyRenderer: {fileID: 859552518}
   spawnIndicator: {fileID: 695604577}
-  moveSpeed: 0
+  moveSpeed: 1
   playerDetectionRadius: 0.5
   passAwayParticle: {fileID: 1971016389}
   gizmos: 0
@@ -3821,7 +3821,7 @@ GameObject:
   - component: {fileID: 1971016389}
   - component: {fileID: 1971016388}
   m_Layer: 0
-  m_Name: Particle System
+  m_Name: Pass Away Particles
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
