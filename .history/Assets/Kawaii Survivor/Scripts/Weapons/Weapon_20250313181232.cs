@@ -83,13 +83,13 @@ public class Weapon : MonoBehaviour
         // Enemy[] enemies = Physics2D.OverlapCircleAll(hitDetectionTransform.position, hitDetectionRadius, enemyMask).Select(x => x.GetComponent<Enemy>()).ToArray();
         Enemy[] enemies = Physics2D.OverlapBoxAll
         (
-            hitDetectionTransform.position,
-            // 获取碰撞器的大小
-            hitCollider.bounds.size,
-            // 获取碰撞器的位置 
-            hitDetectionTransform.localEulerAngles.z,
-            // 获取碰撞器所在的层
-            enemyMask)
+        hitDetectionTransform.position,
+        // 获取碰撞器的大小
+         hitCollider.bounds.size,
+         // 获取碰撞器的位置 
+         hitDetectionTransform.localEulerAngles.z,
+         // 获取碰撞器所在的层
+         enemyMask)
         .Select(x => x.GetComponent<Enemy>()).ToArray();
 
         foreach (Enemy enemy in enemies)

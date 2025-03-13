@@ -17,7 +17,7 @@ public class Weapon : MonoBehaviour
     [Header("Elements")]
     [SerializeField] private Transform hitDetectionTransform;
     [SerializeField] private float hitDetectionRadius = 0.3f;
-    [SerializeField] private BoxCollider2D hitCollider;
+    [SerializeField] private Collider2D hitCollider;
 
     [Header("Settings")]
     [SerializeField] private float range;
@@ -81,15 +81,7 @@ public class Weapon : MonoBehaviour
     {
         // 检测是否在攻击范围内
         // Enemy[] enemies = Physics2D.OverlapCircleAll(hitDetectionTransform.position, hitDetectionRadius, enemyMask).Select(x => x.GetComponent<Enemy>()).ToArray();
-        Enemy[] enemies = Physics2D.OverlapBoxAll
-        (
-            hitDetectionTransform.position,
-            // 获取碰撞器的大小
-            hitCollider.bounds.size,
-            // 获取碰撞器的位置 
-            hitDetectionTransform.localEulerAngles.z,
-            // 获取碰撞器所在的层
-            enemyMask)
+        Enemy[] enemies = Physics2D.OverlapCircleAll(hitDetectionTransform.position, hitCollider.bounds.size, hitDetectionTransform.localEulerAngles.z, enemyMask)
         .Select(x => x.GetComponent<Enemy>()).ToArray();
 
         foreach (Enemy enemy in enemies)

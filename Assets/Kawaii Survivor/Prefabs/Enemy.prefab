@@ -5082,7 +5082,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &5040656046430345983
 RectTransform:
   m_ObjectHideFlags: 0
@@ -5295,6 +5295,7 @@ MonoBehaviour:
   healthText: {fileID: 2397044016147366944}
   enemyRenderer: {fileID: 8919838512608314104}
   spawnIndicator: {fileID: 4573195587898340766}
+  enemyCollider: {fileID: 3058177449914978937}
   passAwayParticle: {fileID: 4014483437635326651}
   damage: 1
   attackFrequency: 1
@@ -5320,7 +5321,7 @@ CapsuleCollider2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 9010287837946075915}
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 3
   m_Density: 1
   m_Material: {fileID: 0}

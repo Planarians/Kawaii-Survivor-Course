@@ -20,7 +20,6 @@ public class Enemy : MonoBehaviour
     [Header("Spawn Sequence Related")]
     [SerializeField] private SpriteRenderer enemyRenderer;
     [SerializeField] private SpriteRenderer spawnIndicator;
-    [SerializeField] private Collider2D enemyCollider;
     private bool hasSpawned = false;
 
     [Header("Effects")]
@@ -35,7 +34,7 @@ public class Enemy : MonoBehaviour
     private float attackDelay = 0f;
 
     [Header("Actions")]
-    public static Action<int, Vector2> onDamageTaken;
+    public Action<int> onDamageTaken;
 
 
     [Header("DEBUG")]
@@ -86,7 +85,6 @@ public class Enemy : MonoBehaviour
         // Show the enemy after 3 seconds
         // Hide the spawn indicator
         SetRenderersVisibility(true);
-        enemyCollider.enabled = true;
         // moveSpeed = 1f;
         hasSpawned = true;
 
@@ -141,7 +139,7 @@ public class Enemy : MonoBehaviour
 
         healthText.text = health.ToString();
 
-        onDamageTaken?.Invoke(damage, transform.position);
+        onDamageTaken?.Invoke(damage);
 
         if (health <= 0)
         {

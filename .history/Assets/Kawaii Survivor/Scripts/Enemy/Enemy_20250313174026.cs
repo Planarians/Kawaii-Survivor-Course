@@ -86,7 +86,6 @@ public class Enemy : MonoBehaviour
         // Show the enemy after 3 seconds
         // Hide the spawn indicator
         SetRenderersVisibility(true);
-        enemyCollider.enabled = true;
         // moveSpeed = 1f;
         hasSpawned = true;
 
