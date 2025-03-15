@@ -2,7 +2,7 @@ using UnityEngine;
 using TMPro;
 using System;
 
-public abstract class Enemy : MonoBehaviour
+public class Enemy : MonoBehaviour
 {
     [Header("Components")]
     protected EnemyMovement movement;
@@ -37,12 +37,15 @@ public abstract class Enemy : MonoBehaviour
     [Header("DEBUG")]
     [SerializeField] protected bool gizmos;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
-    protected virtual void Start()
+    void Start()
     {
         health = maxHealth;
         healthText.text = health.ToString();
+
         movement = GetComponent<EnemyMovement>();
+
         player = FindFirstObjectByType<Player>();
+
         // 如果玩家不存在，则销毁敌人
         if (player == null)
         {
@@ -54,16 +57,20 @@ public abstract class Enemy : MonoBehaviour
     }
 
     // Update is called once per frame
-    protected bool CanAttack()
+    void Update()
     {
-        return enemyRenderer.enabled;
+        if (!enemyRenderer.enabled)
+        {
+            return;
+        }
     }
 
-    protected void StartSpawnSequence()
+    private void StartSpawnSequence()
     {
         // Hide the renderer
         // Show the spawn indicator
         SetRenderersVisibility(false);
+
 
         // Scale up & down the spawn 
         Vector3 targetScale = spawnIndicator.transform.localScale * 1.2f;
@@ -73,7 +80,7 @@ public abstract class Enemy : MonoBehaviour
             .setOnComplete(SpawnSequenceComplete);
     }
 
-    protected void SpawnSequenceComplete()
+    private void SpawnSequenceComplete()
     {
         // Show the enemy after 3 seconds
         // Hide the spawn indicator
@@ -82,17 +89,10 @@ public abstract class Enemy : MonoBehaviour
         // moveSpeed = 1f;
         hasSpawned = true;
 
-        Debug.Log("SpawnSequenceComplete Storeplayer");
-
-        if (player == null)
-        {
-            Debug.Log("player is null spawnsequencecomplete");
-        }
-
         movement.StorePlayer(player);
     }
 
-    protected void SetRenderersVisibility(bool visibility)
+    private void SetRenderersVisibility(bool visibility)
     {
         enemyRenderer.enabled = visibility;
         spawnIndicator.enabled = !visibility;
@@ -113,21 +113,4 @@ public abstract class Enemy : MonoBehaviour
         }
     }
 
-    protected void PassAway()
-    {
-        //Unparent the particle
-        passAwayParticle.transform.SetParent(null);
-        passAwayParticle.Play();
-        Destroy(gameObject);
-    }
-
-
-    //用于检测Enemy检测范围
-    protected void OnDrawGizmos()
-    {
-        if (!gizmos) return;
-        Gizmos.color = Color.red;
-        //绘制Enemy检测范围
-        Gizmos.DrawWireSphere(transform.position, playerDetectionRadius);
-    }
 }

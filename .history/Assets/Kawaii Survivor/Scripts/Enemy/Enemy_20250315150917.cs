@@ -82,7 +82,7 @@ public abstract class Enemy : MonoBehaviour
         // moveSpeed = 1f;
         hasSpawned = true;
 
-        Debug.Log("SpawnSequenceComplete Storeplayer");
+        Debug.Log("Storeplayer");
 
         if (player == null)
         {

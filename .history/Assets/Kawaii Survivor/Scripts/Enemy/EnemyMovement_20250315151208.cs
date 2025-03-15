@@ -30,7 +30,6 @@ public class EnemyMovement : MonoBehaviour
 
     public void StorePlayer(Player player)
     {
-        Debug.Log("StorePlayer");
         if (player == null)
         {
             Debug.Log("player is null storeplayer");

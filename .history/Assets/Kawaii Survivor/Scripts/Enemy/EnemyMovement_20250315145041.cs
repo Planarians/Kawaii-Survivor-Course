@@ -30,7 +30,6 @@ public class EnemyMovement : MonoBehaviour
 
     public void StorePlayer(Player player)
     {
-        Debug.Log("StorePlayer");
         if (player == null)
         {
             Debug.Log("player is null storeplayer");
@@ -47,8 +46,6 @@ public class EnemyMovement : MonoBehaviour
             Debug.LogWarning("Player is null, cannot follow.");
             return;
         }
-
-        Debug.Log("startFollowPlayer");
         // 获取玩家位置
         Vector2 direction = (player.transform.position - transform.position).normalized;
         // 计算目标位置

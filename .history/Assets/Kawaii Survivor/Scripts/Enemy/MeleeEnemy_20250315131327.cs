@@ -1,48 +1,35 @@
-using UnityEngine;
 using TMPro;
+using UnityEngine;
 using System;
 
-public abstract class Enemy : MonoBehaviour
+[RequireComponent(typeof(EnemyMovement))]
+public class MeleeEnemy : Enemy
 {
-    [Header("Components")]
-    protected EnemyMovement movement;
 
-
-    [Header("Health")]
-    [SerializeField] protected int maxHealth = 10;
-    protected int health;
-    [SerializeField] protected TextMeshPro healthText;
-
-
-    [Header("Elements")]
-    protected Player player;
-
-    [Header("Spawn Sequence Related")]
-    [SerializeField] protected SpriteRenderer enemyRenderer;
-    [SerializeField] protected SpriteRenderer spawnIndicator;
-    [SerializeField] protected Collider2D enemyCollider;
-    protected bool hasSpawned = false;
-
-
-    [Header("Effects")]
-    [SerializeField] protected ParticleSystem passAwayParticle;
 
     [Header("Attack")]
-    [SerializeField] protected float playerDetectionRadius = 1f;
+    [SerializeField] private int damage;
+    [SerializeField] private float attackFrequency = 1f;
+    private float attackTimer = 0f;
+    private float attackDelay = 0f;
 
     [Header("Actions")]
     public static Action<int, Vector2> onDamageTaken;
 
 
     [Header("DEBUG")]
-    [SerializeField] protected bool gizmos;
+    [SerializeField] private bool gizmos;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
-    protected virtual void Start()
+    void Start()
     {
         health = maxHealth;
         healthText.text = health.ToString();
+
         movement = GetComponent<EnemyMovement>();
+
         player = FindFirstObjectByType<Player>();
+
         // 如果玩家不存在，则销毁敌人
         if (player == null)
         {
@@ -50,20 +37,21 @@ public abstract class Enemy : MonoBehaviour
             Destroy(gameObject);
         }
 
+
         StartSpawnSequence();
+
+        // Prevent Following& Attacking durring the spawn sequence
+        // Calculate the attack delay based on the attack frequency
+        attackDelay = 1f / attackFrequency;
+
     }
 
-    // Update is called once per frame
-    protected bool CanAttack()
-    {
-        return enemyRenderer.enabled;
-    }
-
-    protected void StartSpawnSequence()
+    private void StartSpawnSequence()
     {
         // Hide the renderer
         // Show the spawn indicator
         SetRenderersVisibility(false);
+
 
         // Scale up & down the spawn 
         Vector3 targetScale = spawnIndicator.transform.localScale * 1.2f;
@@ -72,8 +60,7 @@ public abstract class Enemy : MonoBehaviour
             .setLoopPingPong(4)
             .setOnComplete(SpawnSequenceComplete);
     }
-
-    protected void SpawnSequenceComplete()
+    private void SpawnSequenceComplete()
     {
         // Show the enemy after 3 seconds
         // Hide the spawn indicator
@@ -82,20 +69,53 @@ public abstract class Enemy : MonoBehaviour
         // moveSpeed = 1f;
         hasSpawned = true;
 
-        Debug.Log("SpawnSequenceComplete Storeplayer");
-
-        if (player == null)
-        {
-            Debug.Log("player is null spawnsequencecomplete");
-        }
-
         movement.StorePlayer(player);
     }
 
-    protected void SetRenderersVisibility(bool visibility)
+    private void SetRenderersVisibility(bool visibility)
     {
         enemyRenderer.enabled = visibility;
         spawnIndicator.enabled = !visibility;
+    }
+    // Update is called once per frame
+    void Update()
+    {
+
+        if (!enemyRenderer.enabled)
+        {
+            return;
+        }
+        if (attackTimer >= attackDelay)
+        {
+            TryAttack();
+            attackTimer = 0f;
+        }
+        else
+        {
+            Wait();
+        }
+
+        movement.FollowPlayer();
+    }
+
+
+    private void Wait()
+    {
+        attackTimer += Time.deltaTime;
+    }
+
+
+    private void TryAttack()
+    {
+        float distanceToPlayer = Vector2.Distance(transform.position, player.transform.position);
+
+        // Debug.Log(distanceToPlayer);
+        if (distanceToPlayer <= playerDetectionRadius)
+        {
+            // player.TakeDamage(1);
+            // PassAway();
+            Attack();
+        }
     }
 
     public void TakeDamage(int damage)
@@ -113,7 +133,16 @@ public abstract class Enemy : MonoBehaviour
         }
     }
 
-    protected void PassAway()
+    private void Attack()
+    {
+        // Debug.Log("Dealing" + damage + "damage to the player...");
+        attackTimer = 0f;
+
+        player.TakeDamage(damage);
+
+    }
+
+    private void PassAway()
     {
         //Unparent the particle
         passAwayParticle.transform.SetParent(null);
@@ -121,13 +150,14 @@ public abstract class Enemy : MonoBehaviour
         Destroy(gameObject);
     }
 
-
     //用于检测Enemy检测范围
-    protected void OnDrawGizmos()
+    private void OnDrawGizmos()
     {
         if (!gizmos) return;
         Gizmos.color = Color.red;
         //绘制Enemy检测范围
         Gizmos.DrawWireSphere(transform.position, playerDetectionRadius);
+
     }
+
 }

@@ -1,8 +1,6 @@
 using TMPro;
 using UnityEngine;
 using System;
-using UnityEditor.Rendering;
-using Unity.Collections;
 
 
 [RequireComponent(typeof(EnemyMovement), typeof(RanageEnemyAttack))]
@@ -14,25 +12,14 @@ public class RangeEnemy : Enemy
     private RanageEnemyAttack attack;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
-    protected override void Start()
+    void Start()
     {
-        base.Start();
         attack = GetComponent<RanageEnemyAttack>();
         attack.StorePlayer(player);
     }
     void Update()
     {
-        if (!CanAttack())
-        {
-            return;
-        }
         ManageAttack();
-
-
-        Vector3 scale = transform.localScale;
-        scale.x = player.transform.position.x > transform.position.x ? 1 : -1;
-        transform.localScale = scale;
-
     }
 
     private void ManageAttack()
@@ -49,9 +36,43 @@ public class RangeEnemy : Enemy
     }
 
 
+
     private void TryAttack()
     {
         attack.AutoAim();
     }
 
+    public void TakeDamage(int damage)
+    {
+        int realDamage = Mathf.Min(damage, health);
+        health -= realDamage;
+
+        healthText.text = health.ToString();
+
+        onDamageTaken?.Invoke(damage, transform.position);
+
+        if (health <= 0)
+        {
+            PassAway();
+        }
+    }
+
+
+    private void PassAway()
+    {
+        //Unparent the particle
+        passAwayParticle.transform.SetParent(null);
+        passAwayParticle.Play();
+        Destroy(gameObject);
+    }
+
+    //用于检测Enemy检测范围
+    private void OnDrawGizmos()
+    {
+        if (!gizmos) return;
+        Gizmos.color = Color.magenta;
+        //绘制Enemy检测范围
+        Gizmos.DrawWireSphere(transform.position, playerDetectionRadius);
+
+    }
 }

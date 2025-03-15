@@ -22,13 +22,11 @@ public class RangeEnemy : Enemy
     }
     void Update()
     {
-        if (!CanAttack())
+        if (CanAttack())
         {
             return;
         }
         ManageAttack();
-
-
         Vector3 scale = transform.localScale;
         scale.x = player.transform.position.x > transform.position.x ? 1 : -1;
         transform.localScale = scale;

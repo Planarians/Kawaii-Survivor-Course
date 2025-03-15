@@ -22,7 +22,7 @@ public class RangeEnemy : Enemy
     }
     void Update()
     {
-        if (!CanAttack())
+        if (CanAttack())
         {
             return;
         }

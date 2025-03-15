@@ -1,48 +1,58 @@
-using UnityEngine;
 using TMPro;
+using UnityEngine;
 using System;
 
-public abstract class Enemy : MonoBehaviour
+
+[RequireComponent(typeof(EnemyMovement), typeof(RanageEnemyAttack))]
+
+public class RangeEnemy : Enemy
 {
+
     [Header("Components")]
-    protected EnemyMovement movement;
+    private RanageEnemyAttack attack;
 
 
-    [Header("Health")]
-    [SerializeField] protected int maxHealth = 10;
-    protected int health;
-    [SerializeField] protected TextMeshPro healthText;
-
+    private int health;
+    [SerializeField] private TextMeshPro healthText;
 
     [Header("Elements")]
-    protected Player player;
+    private Player player;
 
     [Header("Spawn Sequence Related")]
-    [SerializeField] protected SpriteRenderer enemyRenderer;
-    [SerializeField] protected SpriteRenderer spawnIndicator;
-    [SerializeField] protected Collider2D enemyCollider;
-    protected bool hasSpawned = false;
-
+    [SerializeField] private SpriteRenderer enemyRenderer;
+    [SerializeField] private SpriteRenderer spawnIndicator;
+    [SerializeField] private Collider2D enemyCollider;
+    private bool hasSpawned = false;
 
     [Header("Effects")]
-    [SerializeField] protected ParticleSystem passAwayParticle;
+    [SerializeField] private ParticleSystem passAwayParticle;
+
+
+
 
     [Header("Attack")]
-    [SerializeField] protected float playerDetectionRadius = 1f;
+    [SerializeField] private float playerDetectionRadius = 1f;
 
     [Header("Actions")]
     public static Action<int, Vector2> onDamageTaken;
 
 
     [Header("DEBUG")]
-    [SerializeField] protected bool gizmos;
+    [SerializeField] private bool gizmos;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
-    protected virtual void Start()
+    void Start()
     {
         health = maxHealth;
         healthText.text = health.ToString();
+
         movement = GetComponent<EnemyMovement>();
+        attack = GetComponent<RanageEnemyAttack>();
+
         player = FindFirstObjectByType<Player>();
+
+        attack.StorePlayer(player);
+
         // 如果玩家不存在，则销毁敌人
         if (player == null)
         {
@@ -50,20 +60,18 @@ public abstract class Enemy : MonoBehaviour
             Destroy(gameObject);
         }
 
+
         StartSpawnSequence();
+
+
     }
 
-    // Update is called once per frame
-    protected bool CanAttack()
-    {
-        return enemyRenderer.enabled;
-    }
-
-    protected void StartSpawnSequence()
+    private void StartSpawnSequence()
     {
         // Hide the renderer
         // Show the spawn indicator
         SetRenderersVisibility(false);
+
 
         // Scale up & down the spawn 
         Vector3 targetScale = spawnIndicator.transform.localScale * 1.2f;
@@ -72,8 +80,7 @@ public abstract class Enemy : MonoBehaviour
             .setLoopPingPong(4)
             .setOnComplete(SpawnSequenceComplete);
     }
-
-    protected void SpawnSequenceComplete()
+    private void SpawnSequenceComplete()
     {
         // Show the enemy after 3 seconds
         // Hide the spawn indicator
@@ -82,20 +89,45 @@ public abstract class Enemy : MonoBehaviour
         // moveSpeed = 1f;
         hasSpawned = true;
 
-        Debug.Log("SpawnSequenceComplete Storeplayer");
-
-        if (player == null)
-        {
-            Debug.Log("player is null spawnsequencecomplete");
-        }
-
         movement.StorePlayer(player);
     }
-
-    protected void SetRenderersVisibility(bool visibility)
+    private void SetRenderersVisibility(bool visibility)
     {
         enemyRenderer.enabled = visibility;
         spawnIndicator.enabled = !visibility;
+    }
+
+
+    void Update()
+    {
+
+        if (!enemyRenderer.enabled)
+        {
+            return;
+        }
+
+        ManageAttack();
+
+    }
+
+    private void ManageAttack()
+    {
+        float distanceToPlayer = Vector2.Distance(transform.position, player.transform.position);
+        if (distanceToPlayer > playerDetectionRadius)
+        {
+            movement.FollowPlayer();
+        }
+        else
+        {
+            TryAttack();
+        }
+    }
+
+
+
+    private void TryAttack()
+    {
+        attack.AutoAim();
     }
 
     public void TakeDamage(int damage)
@@ -113,7 +145,8 @@ public abstract class Enemy : MonoBehaviour
         }
     }
 
-    protected void PassAway()
+
+    private void PassAway()
     {
         //Unparent the particle
         passAwayParticle.transform.SetParent(null);
@@ -121,13 +154,13 @@ public abstract class Enemy : MonoBehaviour
         Destroy(gameObject);
     }
 
-
     //用于检测Enemy检测范围
-    protected void OnDrawGizmos()
+    private void OnDrawGizmos()
     {
         if (!gizmos) return;
-        Gizmos.color = Color.red;
+        Gizmos.color = Color.magenta;
         //绘制Enemy检测范围
         Gizmos.DrawWireSphere(transform.position, playerDetectionRadius);
+
     }
 }

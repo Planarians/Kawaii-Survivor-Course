@@ -41,8 +41,11 @@ public abstract class Enemy : MonoBehaviour
     {
         health = maxHealth;
         healthText.text = health.ToString();
+
         movement = GetComponent<EnemyMovement>();
+
         player = FindFirstObjectByType<Player>();
+
         // 如果玩家不存在，则销毁敌人
         if (player == null)
         {
@@ -65,6 +68,7 @@ public abstract class Enemy : MonoBehaviour
         // Show the spawn indicator
         SetRenderersVisibility(false);
 
+
         // Scale up & down the spawn 
         Vector3 targetScale = spawnIndicator.transform.localScale * 1.2f;
         LeanTween.scale(spawnIndicator.gameObject, targetScale, .3f)
@@ -82,12 +86,7 @@ public abstract class Enemy : MonoBehaviour
         // moveSpeed = 1f;
         hasSpawned = true;
 
-        Debug.Log("SpawnSequenceComplete Storeplayer");
-
-        if (player == null)
-        {
-            Debug.Log("player is null spawnsequencecomplete");
-        }
+        Debug.Log("Storeplayer");
 
         movement.StorePlayer(player);
     }
