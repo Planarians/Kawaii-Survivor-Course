@@ -5257,7 +5257,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 829b7e7dae431774eb63e425e6f5fac7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  shootingoint: {fileID: 5489260653000634730}
+  shootPoint: {fileID: 5489260653000634730}
   bulletPrefab: {fileID: 5655838816648747069, guid: 756fe7938d2f61442a4a8a1e5a2b9c4b, type: 3}
   damage: 1
   attackFrequency: 1
